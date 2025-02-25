@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Travel Explorer - Full Functional Website</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Fade-in Up Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+    /* Active navigation link style */
+    .nav-active {
+      color: #2563eb; /* Tailwind blue-600 */
+      border-bottom: 2px solid #2563eb;
+    }
+    /* Optional: Custom transition for tab content */
+    .fade {
+      transition: opacity 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+
+  <!-- =================================== -->
+  <!-- Navigation Bar (Works with smooth scroll to sections) -->
+  <!-- =================================== -->
+  <header class="bg-white shadow fixed w-full z-50">
+    <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+      <!-- Logo and Brand -->
+      <div class="flex items-center mb-4 md:mb-0">
+        <img src="Admin/LOGO01.png" alt="Logo" width="200" height="600">
+      </div>
+      <!-- Navigation Links -->
+      <nav class="flex flex-wrap justify-center items-center space-x-4">
+        <a href="#home" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">Home</a>
+        <a href="#Temple" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">Temple</a>
+        <a href="#hotels" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">Hotels</a>
+        <a href="#Travel" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">Travel</a>
+        <a href="#holidays" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">Holidays</a>
+        <a href="#Events" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">Events</a>
+        <a href="#About" class="nav-link text-gray-700 hover:text-blue-600 px-2 py-1">About</a>
+      </nav>
+      <!-- Authentication Link -->
+  <div class="flex space-x-4 mt-4 md:mt-0">
+    <a href="#auth" id="accountLink" class="nav-link bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Account</a>
+  </div>
+
+      <!-- Modal Popup for Login/Signup -->
+<div id="loginModal" class="fixed inset-0 flex items-center justify-center modal-overlay hidden">
+  <div class="bg-blue-100 rounded-lg shadow-lg max-w-md w-full p-6 relative">
+    <!-- Close Button -->
+    <button id="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+    <!-- Modal Heading -->
+    <h2 class="text-2xl font-bold mb-4 text-center">Welcome!</h2>
+    <p class="text-center mb-4">Login or Signup to get the best experience</p>
+    
+    <!-- Tab Navigation -->
+    <div class="flex justify-center mb-4">
+      <button id="loginTab" class="px-4 py-2 border-b-2 border-blue-600 font-semibold text-blue-600 focus:outline-none">Login</button>
+      <button id="signupTab" class="px-4 py-2 border-b-2 border-transparent font-semibold text-gray-600 ml-4 focus:outline-none">Signup</button>
+    </div>
+    
+    <!-- Login Form -->
+    <div id="loginForm">
+      <form>
+        <div class="mb-4">
+          <label for="loginEmail" class="block text-gray-700 text-sm font-medium mb-1">Email</label>
+          <input type="email" id="loginEmail" class="w-full border rounded px-3 py-2" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-4">
+          <label for="loginPassword" class="block text-gray-700 text-sm font-medium mb-1">Password</label>
+          <input type="password" id="loginPassword" class="w-full border rounded px-3 py-2" placeholder="Enter your password" required>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none">Login</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Signup Form -->
+    <div id="signupForm" class="hidden">
+      <form>
+        <div class="mb-4">
+          <label for="signupName" class="block text-gray-700 text-sm font-medium mb-1">Full Name</label>
+          <input type="text" id="signupName" class="w-full border rounded px-3 py-2" placeholder="Enter your full name" required>
+        </div>
+        <div class="mb-4">
+          <label for="signupEmail" class="block text-gray-700 text-sm font-medium mb-1">Email</label>
+          <input type="email" id="signupEmail" class="w-full border rounded px-3 py-2" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-4">
+          <label for="signupPassword" class="block text-gray-700 text-sm font-medium mb-1">Password</label>
+          <input type="password" id="signupPassword" class="w-full border rounded px-3 py-2" placeholder="Create a password" required>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none">Signup</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- "Not Now" Button -->
+    <div class="text-center mt-4">
+      <button id="notNowBtn" class="text-gray-600 hover:underline focus:outline-none">Not Now</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal Popup for Account -->
+  <div id="accountModal" class="fixed inset-0 flex items-start justify-end modal-overlay hidden">
+    <div class="bg-blue-100 rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <!-- Close Button -->
+      <button id="closeAccountModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+      
+      <!-- Modal Heading -->
+      <h2 class="text-2xl font-bold mb-4 text-center">My Account</h2>
+      
+      <!-- Profile Section -->
+      <div class="flex flex-col items-center mb-6">
+        <img src="Events/Janmastmi.jpg" alt="Profile Photo" class="w-24 h-24 rounded-full mb-3">
+        <h3 class="text-xl font-semibold">Shri Krishna</h3>
+        <p class="text-gray-600">shrikrishna.com</p>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="space-y-4">
+        <a href="#" class="block text-gray-700 hover:bg-gray-100 p-2 rounded">Dashboard</a>
+        <a href="#" class="block text-gray-700 hover:bg-gray-100 p-2 rounded">My Trips</a>
+        <a href="#" class="block text-gray-700 hover:bg-gray-100 p-2 rounded">Settings</a>
+      </div>
+    </div>
+  </div>
+  </header>
+
+  <!-- =================================== -->
+  <!-- Home Section (Hero with Tabbed Search Widget) -->
+  <!-- =================================== -->
+  <section id="home" class="pt-24 relative bg-cover bg-center" style="background-image: url('Admin/krishna.jpg');">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center h-[80vh]">
+      <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fadeInUp">Explore the Divine Journey</h1>
+    </div>
+  </section>
+
+   <!-- Main Content: Temples -->
+  <main id="Temple" class="pt-24 pb-16">
+    <div class="container mx-auto px-6">
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 animate-fadeInUp">Explore Temples</h1>
+      <p class="text-center text-gray-700 mb-10 animate-fadeInUp" style="animation-delay: 0.3s;">
+        Discover the sacred temples you should visit on your journey.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Temple Card 1 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fadeInUp">
+          <img src="Temple/Janmbhoomi.jpg" alt="Temple of Dawn" class="w-full h-48 object-cover" loading="lazy">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">Shri Krishna Janmabhoomi</h2>
+            <p class="text-gray-600 mb-2">Mathura, Uttar Pradesh</p>
+            <p class="text-gray-700"> – The sacred birthplace of Lord Krishna, revered for its divine sanctity, ancient temples, and vibrant spiritual atmosphere.</p>
+          </div>
+        </div>
+        <!-- Temple Card 2 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fadeInUp" style="animation-delay: 0.2s;">
+          <img src="Temple/Prem mansir.jpg" alt="Golden Temple" class="w-full h-48 object-cover" loading="lazy">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">Prem Mandir</h2>
+            <p class="text-gray-600 mb-2">Vrindavan, Uttar Pradesh</p>
+            <p class="text-gray-700">A breathtaking temple of white marble, renowned for its intricate carvings, enchanting light shows, and devotion to Radha-Krishna and Sita-Ram.</p>
+          </div>
+        </div>
+        <!-- Temple Card 3 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fadeInUp" style="animation-delay: 0.4s;">
+          <img src="Temple/Iskon.jpg" alt="Temple of Heaven" class="w-full h-48 object-cover" loading="lazy">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">Iskon</h2>
+            <p class="text-gray-600 mb-2">Mathura, Uttar Pradesh</p>
+            <p class="text-gray-700">A spiritual haven dedicated to Lord Krishna, renowned for its mesmerizing deity idols, soulful kirtans, and vibrant festivals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+ <!-- =================================== -->
+  <!-- Hotels Section with Recommended Hotels -->
+  <!-- =================================== -->
+  <section id="hotels" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <!-- Hotel Search Form -->
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Hotel Search</h2>
+      <form class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 p-6 border rounded shadow">
+        <div>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Destination</label>
+          <input type="text" placeholder="City or Hotel Name" class="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Check-In Date</label>
+          <input type="date" class="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-medium mb-1">Check-Out Date</label>
+          <input type="date" class="w-full border rounded px-3 py-2" />
+        </div>
+        <div class="md:col-span-3 text-right">
+          <button type="submit" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Search Hotels</button>
+        </div>
+      </form>
+
+      <!-- Recommended Hotels Section -->
+      <div class="mt-16">
+        <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Recommended Hotels</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Hotel Card 1 -->
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <img src="Hotel/648935891.jpg" alt="Hotel Sunshine" class="w-full h-48 object-cover" loading="lazy" />
+            <div class="p-6">
+              <h4 class="text-xl font-bold mb-2">Hotel Sunshine</h4>
+              <p class="text-gray-600 mb-2">MATHURA, Uttar Pradesh</p>
+              <div class="flex items-center mb-2">
+                <span class="text-yellow-500">★★★★☆</span>
+                <span class="ml-2 text-gray-700">(4.0)</span>
+              </div>
+              <p class="text-gray-700 font-semibold">$150/night</p>
+            </div>
+          </div>
+          <!-- Hotel Card 2 -->
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <img src="Hotel/533713029.jpg" alt="The Grand Resort" class="w-full h-48 object-cover" loading="lazy" />
+            <div class="p-6">
+              <h4 class="text-xl font-bold mb-2">The Grand Resort</h4>
+              <p class="text-gray-600 mb-2">VRINDAVAN, Uttar Pradesh</p>
+              <div class="flex items-center mb-2">
+                <span class="text-yellow-500">★★★★★</span>
+                <span class="ml-2 text-gray-700">(5.0)</span>
+              </div>
+              <p class="text-gray-700 font-semibold">$250/night</p>
+            </div>
+          </div>
+          <!-- Hotel Card 3 -->
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <img src="Hotel/106538090.jpg" alt="Ocean View Inn" class="w-full h-48 object-cover" loading="lazy" />
+            <div class="p-6">
+              <h4 class="text-xl font-bold mb-2">Ocean View Inn</h4>
+              <p class="text-gray-600 mb-2">MATHURA, Uttar Pradesh</p>
+              <div class="flex items-center mb-2">
+                <span class="text-yellow-500">★★★☆☆</span>
+                <span class="ml-2 text-gray-700">(3.0)</span>
+              </div>
+              <p class="text-gray-700 font-semibold">$120/night</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =================================== -->
+  <!-- Updated Travel Options Comparison Section -->
+  <!-- =================================== -->
+  <section id="Travel" class="pt-24 pb-16">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Compare Travel Options</h2>
+      <div class="flex flex-wrap justify-center gap-6">
+        <!-- Flight Card -->
+        <div class="w-full sm:w-80 bg-gray-50 p-4 border rounded shadow hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+          <div class="flex items-center">
+            <span class="text-3xl">✈️</span>
+            <h3 class="ml-4 text-xl font-bold">Flight Search</h3>
+            <form class="grid grid-cols-1 gap-4">
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">From</label>
+                <input type="text" placeholder="Departure City" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">To</label>
+                <input type="text" placeholder="Arrival City" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Departure Date</label>
+                <input type="date" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Return Date</label>
+                <input type="date" class="w-full border rounded px-3 py-2" />
+              </div>
+            </form>
+          </div>
+          <button class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Search Flight</button>
+        </div>
+        <!-- Train Card -->
+        <div class="w-full sm:w-80 bg-gray-50 p-4 border rounded shadow hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+          <div class="flex items-center">
+            <span class="text-3xl">🚆</span>
+            <h3 class="ml-4 text-xl font-bold">Train Search</h3>
+            <form class="grid grid-cols-1 gap-4">
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">From</label>
+                <input type="text" placeholder="Departure Station" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">To</label>
+                <input type="text" placeholder="Arrival Station" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Journey Date</label>
+                <input type="date" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Return Date</label>
+                <input type="date" class="w-full border rounded px-3 py-2" />
+              </div>
+            </form>
+          </div>
+          <button class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Search Trains</button>
+        </div>
+        <!-- Bus Card -->
+        <div class="w-full sm:w-80 bg-gray-50 p-4 border rounded shadow hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+          <div class="flex items-center">
+            <span class="text-3xl">🚌</span>
+            <h3 class="ml-4 text-xl font-bold">Bus Search</h3>
+            <form class="grid grid-cols-1 gap-4">
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">From</label>
+                <input type="text" placeholder="Departure City" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">To</label>
+                <input type="text" placeholder="Arrival City" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Journey Date</label>
+                <input type="date" class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Return Date</label>
+                <input type="date" class="w-full border rounded px-3 py-2" />
+              </div>
+            </form>
+          </div>
+          <button class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Search Buses</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================== -->
+  <!-- Holidays Section (Holiday Packages or Search) -->
+  <!-- =================================== -->
+  <section id="holidays" class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Holiday Packages</h2>
+      <p class="text-center text-gray-700 mb-8">Discover exciting holiday packages tailored for you.</p>
+      <!-- Example Holiday Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-gray-100 rounded-lg overflow-hidden shadow transform hover:scale-105 transition-transform duration-300">
+          <img src="Tour/Barsana tour.jpg" alt="Beach Holiday" class="w-full h-48 object-cover" loading="lazy"/>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">Barsana Temples</h3>
+            <p class="text-gray-700 mb-4">The Birth Place Of Shri Radha Rani.</p>
+            <a href="#" class="text-blue-600 hover:underline">View Details</a>
+          </div>
+        </div>
+        <div class="bg-gray-100 rounded-lg overflow-hidden shadow transform hover:scale-105 transition-transform duration-300">
+          <img src="Tour/Vrindavan Tour.jpg" alt="Mountain Retreat" class="w-full h-48 object-cover" loading="lazy"/>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">Vrindavan Temples</h3>
+            <p class="text-gray-700 mb-4">The Divine Wisdom Of Shri Krishna</p>
+            <a href="#" class="text-blue-600 hover:underline">View Details</a>
+          </div>
+        </div>
+        <div class="bg-gray-100 rounded-lg overflow-hidden shadow transform hover:scale-105 transition-transform duration-300">
+          <img src="Tour/Mathura Tour.jpg" alt="City Break" class="w-full h-48 object-cover" loading="lazy"/>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">Mathura Temples</h3>
+            <p class="text-gray-700 mb-4">The Holy Birth Place Of Shri Krishna.</p>
+            <a href="#" class="text-blue-600 hover:underline">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- =================================== -->
+    <!-- Customization & Promotional Offers Section -->
+    <!-- =================================== -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 animate-fadeInUp">Customize Your Tour</h2>
+        <p class="text-center text-gray-700 mb-10 animate-fadeInUp" style="animation-delay: 0.3s;">
+          Not seeing exactly what you want? Build your own tour package and take advantage of our exclusive promotions!
+        </p>
+        <!-- Customization Form or Promotional Offers can go here -->
+        <div class="max-w-2xl mx-auto bg-white p-6 border rounded shadow animate-fadeInUp" style="animation-delay: 0.5s;">
+          <h3 class="text-xl font-bold mb-4">Get Your Custom Tour Offer</h3>
+          <form>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-medium mb-2" for="destination">Destination</label>
+              <input type="text" id="destination" placeholder="Enter Destination" class="w-full border rounded px-3 py-2" required />
+            </div>
+            <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-2" for="duration">Preferred Duration</label>
+                <select id="duration" class="w-full border rounded px-3 py-2" required>
+                  <option value="1">1 Day</option>
+                  <option value="3">3 Days</option>
+                  <option value="5">5 Days</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-medium mb-2" for="budget">Budget ($)</label>
+                <input type="number" id="budget" placeholder="Your Budget" class="w-full border rounded px-3 py-2" required />
+              </div>
+            </div>
+            <div class="text-right">
+              <button type="submit" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+   <!-- Main Content: Events -->
+   <main id="Events" class="pt-24 pb-16">
+    <div class="container mx-auto px-6">
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 animate-fadeInUp">Upcoming Events</h1>
+      <p class="text-center text-gray-700 mb-10 animate-fadeInUp" style="animation-delay: 0.3s;">
+        Stay updated on the latest events and happenings at various destinations.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Event Card 1 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fadeInUp">
+          <img src="Events/Radha Ashtmi.jpg" alt="Music Festival" class="w-full h-48 object-cover" loading="lazy">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">Radha Ashtmi</h2>
+            <p class="text-gray-600 mb-2">Barsana, Uttar Pradesh</p>
+            <p class="text-gray-700 mb-2">Date: March 24, 2025</p>
+            <p class="text-gray-700">Celebrating the birth of Shri Radha Rani with prayers, kirtans, and festive rituals.</p>
+          </div>
+        </div>
+        <!-- Event Card 2 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fadeInUp" style="animation-delay: 0.2s;">
+          <img src="Events/Holi.jpg" alt="Art Exhibition" class="w-full h-48 object-cover" loading="lazy">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">Holi</h2>
+            <p class="text-gray-600 mb-2">Mathura, Uttar Pradesh</p>
+            <p class="text-gray-700 mb-2">Date: March 15, 2025</p>
+            <p class="text-gray-700">The vibrant festival of colors, celebrated with joy, music, and devotion across Mathura and Vrindavan.</p>
+          </div>
+        </div>
+        <!-- Event Card 3 -->
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fadeInUp" style="animation-delay: 0.4s;">
+          <img src="Events/Janmastmi.jpg" alt="Food Carnival" class="w-full h-48 object-cover" loading="lazy">
+          <div class="p-6">
+            <h2 class="text-xl font-bold mb-2">Krishna Janmastami</h2>
+            <p class="text-gray-600 mb-2">Mathura, Uttar Pradesh</p>
+            <p class="text-gray-700 mb-2">Date: September 5, 2025</p>
+            <p class="text-gray-700">Celebrating the birth of Lord Krishna with midnight prayers, kirtans, and grand festivities.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+    <!-- Main About Content -->
+    <main id="About" class="pt-24 pb-16">
+      <div class="container mx-auto px-6">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 animate-fadeInUp">About Us</h1>
+        <!-- Three-Column Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Our Journey (Left Column) -->
+          <div class="gradient-bg p-6 rounded shadow hover-scale animate-fadeInUp">
+            <h2 class="text-2xl font-bold mb-4 text-center">Our Journey</h2>
+            <div class="flex flex-col items-center">
+              <img src="Admin/WhatsApp Image 2024-10-21 at 10.28.29 PM.jpeg" alt="Director" class="h-32 w-32 rounded-full mb-4 shadow-lg">
+            </div>  
+            <ul class="space-y-3 text-gray-700">
+              <li><strong>2024:</strong> Founded to revolutionize pilgrimage tourism with a seamless digital experience.</li>
+              <li><strong>2025:</strong> Introduced AI-powered personalized tours and real-time temple updates.</li>
+              <li><strong>2026:</strong> Launched a multilingual mobile app for global accessibility.</li>
+              <li><strong>2027:</strong> Partnered with local transport providers for optimized navigation.</li>
+              <li><strong>2028:</strong> Became India’s leading digital pilgrimage platform.</li>
+            </ul>
+            <!-- Hidden extra content -->
+            <div id="journeyMore" class="read-more-content text-gray-700 mt-4">
+              <p>
+                <strong>Future:</strong> Expanding to more destinations, integrating AR temple tours, and enhancing AI-driven travel assistance.
+              </p>
+            </div>
+            <button id="readMoreBtn" class="mt-4 text-blue-600 hover:underline focus:outline-none">Read More</button>
+          </div>
+  
+          <!-- Director's Desk (Center Column) -->
+          <div class="gradient-bg p-6 rounded shadow hover-scale animate-fadeInUp">
+            <h2 class="text-2xl font-bold mb-4 text-center">Director's Desk</h2>
+            <div class="flex flex-col items-center">
+              <img src="Admin/Hanuman Ji.jpg" alt="Director" class="h-32 w-32 rounded-full mb-4 shadow-lg">
+              <p class="text-gray-700 mb-4 text-center">
+                Our Director is dedicated to making your journey as inspiring and seamless as possible. Share your thoughts or ask your questions!
+              </p>
+            </div>
+            <form class="space-y-4">
+              <div>
+                <label for="directorName" class="block text-gray-700 text-sm font-medium mb-1">Your Name</label>
+                <input type="text" id="directorName" placeholder="Enter your name" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+              </div>
+              <div>
+                <label for="directorEmail" class="block text-gray-700 text-sm font-medium mb-1">Your Email</label>
+                <input type="email" id="directorEmail" placeholder="Enter your email" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+              </div>
+              <div>
+                <label for="directorQuery" class="block text-gray-700 text-sm font-medium mb-1">Your Message</label>
+                <textarea id="directorQuery" placeholder="Type your message" rows="4" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" required></textarea>
+              </div>
+              <div class="text-right">
+                <button type="submit" class="ripple-button bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 focus:outline-none">Send Message</button>
+              </div>
+            </form>
+          </div>
+  
+          <!-- Meet Our Founders (Right Column) -->
+          <div class="gradient-bg p-6 rounded shadow hover-scale animate-fadeInUp">
+            <h2 class="text-2xl font-bold mb-4 text-center">Meet Our Founders</h2>
+            <div class="space-y-8">
+              <!-- Founder Card -->
+              <div class="gradient-bg p-6 rounded shadow hover-scale animate-fadeInUp">
+                <img src="Admin/chetan Oval.png" alt="Founder" class="h-32 w-32 rounded-full mx-auto mb-4 shadow-lg">
+                <h3 class="text-xl font-bold">Chetan Sharma</h3>
+                <p class="text-gray-600">Founder & CEO</p>
+                <p class="text-gray-700 mt-2">
+                 With passion for innovation and seamless travel experiences has driven Krishna Darshan to become a leading digital pilgrimage platform in India. 🚀
+                </p>
+              </div>
+              <!-- Co-Founder Card -->
+              <div class="gradient-bg p-6 rounded shadow hover-scale animate-fadeInUp">
+                <img src="Admin/chetaaan Oval.png" alt="Co-Founder" class="h-32 w-32 rounded-full mx-auto mb-4 shadow-lg">
+                <h3 class="text-xl font-bold">Rangoli Shrivastva</h3>
+                <p class="text-gray-600">Co-Founder & COO</p>
+                <p class="text-gray-700 mt-2">
+                  Rangoli’s strategic and operational expertise ensures that every pilgrimage experience is seamless, immersive, and memorable. 
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+
+
+ <!-- =================================== -->
+  <!-- Footer Section -->
+  <!-- =================================== -->
+  <footer class="bg-gray-800 py-6">
+    <div class="container mx-auto px-6 text-center text-gray-400">
+      &copy; 2025 Travel Explorer. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- =================================== -->
+  <!-- JavaScript for Smooth Scrolling and Tab Navigation -->
+  <!-- =================================== -->
+  <script>
+    // Smooth scrolling for all navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Highlight active nav link (basic example; for complex cases, consider IntersectionObserver)
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('nav-active'));
+        link.classList.add('nav-active');
+      });
+    });
+
+    // Tab Navigation for the Hero Search Widget
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach(btn => {
+          btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+          btn.classList.add('text-gray-600');
+        });
+        button.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+        button.classList.remove('text-gray-600');
+        document.querySelectorAll('.search-form').forEach(form => {
+          form.classList.add('hidden');
+        });
+        const targetId = button.getAttribute('data-target');
+        document.getElementById(targetId).classList.remove('hidden');
+      });
+    });
+
+    // Tab Navigation for the Authentication Section
+    const authTabs = document.querySelectorAll('.auth-tab');
+    const authForms = document.querySelectorAll('.auth-form');
+    authTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        authTabs.forEach(t => {
+          t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+          t.classList.add('text-gray-600');
+        });
+        authForms.forEach(form => form.classList.add('hidden'));
+        tab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+        tab.classList.remove('text-gray-600');
+        const targetId = tab.getAttribute('data-target');
+        document.getElementById(targetId).classList.remove('hidden');
+      });
+    });
+
+    // Display the modal on page load after a 1-second delay
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loginModal').classList.remove('hidden');
+      }, 1000);
+    });
+    
+    // Get modal elements
+    const modal = document.getElementById('loginModal');
+    const closeModal = document.getElementById('closeModal');
+    const notNowBtn = document.getElementById('notNowBtn');
+    const loginTab = document.getElementById('loginTab');
+    const signupTab = document.getElementById('signupTab');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    // Close modal on clicking "close" or "Not Now"
+    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+    notNowBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    
+    // Toggle between login and signup tabs
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('border-blue-600', 'text-blue-600');
+      signupTab.classList.remove('border-blue-600', 'text-blue-600');
+      signupTab.classList.add('border-transparent', 'text-gray-600');
+      loginForm.classList.remove('hidden');
+      signupForm.classList.add('hidden');
+    });
+    
+    signupTab.addEventListener('click', () => {
+      signupTab.classList.add('border-blue-600', 'text-blue-600');
+      loginTab.classList.remove('border-blue-600', 'text-blue-600');
+      loginTab.classList.add('border-transparent', 'text-gray-600');
+      signupForm.classList.remove('hidden');
+      loginForm.classList.add('hidden');
+    });
+
+    // Get DOM elements
+    const accountLink = document.getElementById('accountLink');
+    const accountModal = document.getElementById('accountModal');
+    const closeAccountModal = document.getElementById('closeAccountModal');
+
+    // Show the Account modal when the Account link is clicked
+    accountLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      accountModal.classList.remove('hidden');
+    });
+
+    // Hide the modal when the close (×) button is clicked
+    closeAccountModal.addEventListener('click', () => {
+      accountModal.classList.add('hidden');
+    });
+
+    // Hide the modal when clicking outside the modal content
+    accountModal.addEventListener('click', (e) => {
+      if (e.target === accountModal) {
+        accountModal.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
